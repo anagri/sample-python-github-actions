@@ -46,7 +46,7 @@ runs:
       shell: bash
       run: |
         if [ "${{ inputs.setup }}" == "true" ]; then
-          PIP_OPTS=""
+          PIP_OPTS="--cache-dir ${{ steps.pip-cache-dir.outputs.pip-cache-dir }}"
         else
           python -m pip cache list
           PIP_OPTS="--no-index --find-links=${{ steps.pip-cache-dir.outputs.pip-cache-dir }}"
