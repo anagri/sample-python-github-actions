@@ -39,8 +39,19 @@ runs:
       shell: bash
       if: steps.setup-python.outputs.cache-hit != 'true' && inputs.setup == 'false'
       run: exit 1
-    - name: Install dependencies from cache
+    - name: pip-opts
+      id: pip-opts
       shell: bash
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install -r '${{ inputs.requirements-file }}' --no-index --find-links='${{ steps.pip-cache-dir.outputs.pip-cache-dir }}'
+        if [ "${{ inputs.setup }}" == "true" ]; then
+          PIP_OPTS=""
+        else
+          PIP_OPTS="--no-index --find-links=\"${{ steps.pip-cache-dir.outputs.pip-cache-dir }}\""
+        fi
+        echo "pip-opts='${PIP_OPTS}'"
+        echo "pip-opts='${PIP_OPTS}'" >> $GITHUB_OUTPUT
+    - name: Install dependencies
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip ${{ steps.pip-opts.outputs.pip-opts }}
+        python -m pip install -r '${{ inputs.requirements-file }}' ${{ steps.pip-opts.outputs.pip-opts }}
