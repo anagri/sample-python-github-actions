@@ -30,7 +30,6 @@ runs:
         echo "PIP_CACHE_DIR=$PIP_CACHE_DIR"
         echo "PIP_CACHE_DIR=$PIP_CACHE_DIR" >> $GITHUB_OUTPUT
     - name: Cache dependencies
-      shell: bash
       id: cache-dependencies
       uses: actions/cache@v3
       with:
