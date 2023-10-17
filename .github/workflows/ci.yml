@@ -1,0 +1,64 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  prepare-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          requirements-file: requirements-dev.txt
+          setup: true
+  lint:
+    needs: prepare-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          requirements-file: requirements-dev.txt
+      - name: Check code formatting
+        run: black --check core/
+
+  prepare-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          requirements-file: requirements-test.txt
+          setup: true
+
+  test:
+    needs: prepare-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          requirements-file: requirements-test.txt
+          setup: false
+      - name: Run tests
+        run: pytest tests/
+
+  prepare-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          requirements-file: requirements.txt
+          setup: true
+
+  package:
+    needs: prepare-package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup environment
+        uses: ./.github/actions/setup
+        with:
+          requirements-file: requirements.txt
+      - name: Just packaging
+        run: echo "Packaging done"

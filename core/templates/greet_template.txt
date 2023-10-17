@@ -1,0 +1,4 @@
+hellos:
+{% for person in persons -%}
+- {{ person }}
+{% endfor %}
