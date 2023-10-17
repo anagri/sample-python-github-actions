@@ -48,6 +48,7 @@ runs:
         if [ "${{ inputs.setup }}" == "true" ]; then
           PIP_OPTS=""
         else
+          find ${{ steps.pip-cache-dir.outputs.pip-cache-dir }}
           PIP_OPTS="--no-index --find-links=${{ steps.pip-cache-dir.outputs.pip-cache-dir }}"
         fi
         echo "PIP_OPTS=${PIP_OPTS}" >> $GITHUB_ENV
