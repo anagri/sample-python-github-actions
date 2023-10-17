@@ -32,8 +32,8 @@ jobs:
             echo "matrix={'plugin': ['plugin1', 'plugin2'], 'version': ['0.1.0', '0.2.0']}" >> $GITHUB_OUTPUT
             exit 0
           fi
-          echo "matrix={'plugin': [${{ matrix.plugin }}], 'version': ['0.1.0', '0.2.0']}"
-          echo "matrix={'plugin': [${{ matrix.plugin }}], 'version': ['0.1.0', '0.2.0']}" >> $GITHUB_OUTPUT
+          echo "matrix={'plugin': ['${{ matrix.plugin }}'], 'version': ['0.1.0', '0.2.0']}"
+          echo "matrix={'plugin': ['${{ matrix.plugin }}'], 'version': ['0.1.0', '0.2.0']}" >> $GITHUB_OUTPUT
   debug:
     needs: custom-input
     runs-on: ubuntu-latest
