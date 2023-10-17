@@ -13,12 +13,12 @@ jobs:
         shell: bash
         run: |
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "matrix={\"plugin\": [\"plugin1\", \"plugin2\"], \"version\": [\"0.1.0\", \"0.2.0\"]}" # debug
-            echo "matrix={\"plugin\": [\"plugin1\", \"plugin2\"], \"version\": [\"0.1.0\", \"0.2.0\"]}" >> $GITHUB_OUTPUT
+            echo "matrix={'plugin': ['plugin1', 'plugin2'], 'version': ['0.1.0', '0.2.0']}" # debug
+            echo "matrix={'plugin': ['plugin1', 'plugin2'], 'version': ['0.1.0', '0.2.0']}" >> $GITHUB_OUTPUT
             exit 0
           fi
-          echo "matrix={\"plugin\": [], \"version\": []}"
-          echo "matrix={\"plugin\": [], \"version\": []}" >> $GITHUB_OUTPUT
+          echo "matrix={'plugin': [], 'version': []}"
+          echo "matrix={'plugin': [], 'version': []}" >> $GITHUB_OUTPUT
   debug:
     needs: custom-input
     runs-on: ubuntu-latest
