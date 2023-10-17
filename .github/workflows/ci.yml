@@ -22,7 +22,7 @@ jobs:
   debug:
     needs: custom-input
     runs-on: ubuntu-latest
-    if: ${{ fromJson(needs.custom-input.outputs.matrix) != '[]' }}
+    if: ${{ toJson(fromJson(needs.custom-input.outputs.matrix)) != '[]' }}
     strategy:
       fail-fast: true
       matrix:
