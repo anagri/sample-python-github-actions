@@ -3,8 +3,23 @@ name: CI
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  custom-input:
+  custom-plugin:
     runs-on: ubuntu-latest
+    outputs:
+      plugin: ${{ steps.plugin.outputs.plugin }}
+    steps:
+      - id: plugin
+        name: plugin
+        shell: bash
+        run: |
+          echo "plugin={'plugin': ['plugin1', 'plugin2']}"
+          echo "plugin={'plugin': ['plugin1', 'plugin2']}" >> $GITHUB_OUTPUT
+  custom-input:
+    needs: custom-plugin
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix: ${{ fromJson(needs.custom-plugin.outputs.plugin) }}
     outputs:
       matrix: ${{ steps.matrix-output.outputs.matrix }}
     steps:
@@ -17,12 +32,12 @@ jobs:
             echo "matrix={'plugin': ['plugin1', 'plugin2'], 'version': ['0.1.0', '0.2.0']}" >> $GITHUB_OUTPUT
             exit 0
           fi
-          echo "matrix={'plugin': [], 'version': []}"
-          echo "matrix={'plugin': [], 'version': []}" >> $GITHUB_OUTPUT
+          echo "matrix={'plugin': [${{ matrix.plugin }}], 'version': ['0.1.0', '0.2.0']}"
+          echo "matrix={'plugin': [${{ matrix.plugin }}], 'version': ['0.1.0', '0.2.0']}" >> $GITHUB_OUTPUT
   debug:
     needs: custom-input
     runs-on: ubuntu-latest
-    if: ${{ toJson(fromJson(needs.custom-input.outputs.matrix).version) != '[]' }}
+    # if: ${{ toJson(fromJson(needs.custom-input.outputs.matrix).version) != '[]' }}
     strategy:
       fail-fast: true
       matrix: ${{ fromJson(needs.custom-input.outputs.matrix) }}
@@ -37,13 +52,13 @@ jobs:
           echo ${{ fromJson(needs.custom-input.outputs.matrix) }}
       - shell: bash
         run: |
-          echo "Current plugin"
+          echo "Current plugin and version"
           echo ${{ matrix.plugin }}
+          echo ${{ matrix.version }}
       - shell: bash
         run: |
           echo "Plugin length"
-          echo "is empty = ${{ fromJson(needs.custom-input.outputs.matrix) == '[]' }}"
-          echo "is not empty = '${{ fromJson(needs.custom-input.outputs.matrix) != '[]' }}'"
+          echo "is equal = ${{ toJson(fromJson(needs.custom-input.outputs.matrix).version) == '["0.1.0", "0.2.0"]' }}"
   prepare-lint:
     needs: debug
     runs-on: ubuntu-latest
