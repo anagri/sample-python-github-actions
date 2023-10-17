@@ -12,10 +12,13 @@ jobs:
         name: matrix-output
         shell: bash
         run: |
-          echo "matrix={\"plugins\": [\"plugin1\", \"plugin2\"]}" >> $GITHUB_OUTPUT
+          echo "matrix={\"plugin\": [\"plugin1\", \"plugin2\"]}" >> $GITHUB_OUTPUT
   debug:
     needs: custom-input
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix: ${{ fromJson(needs.custom-input.outputs.matrix) }}
     steps:
       - shell: bash
         run: |
@@ -25,6 +28,10 @@ jobs:
         run: |
           echo "Parsed json"
           echo ${{ fromJson(needs.custom-input.outputs.matrix) }}
+      - shell: bash
+        run: |
+          echo "Current plugin"
+          echo ${{ matrix.plugin }}
   prepare-lint:
     needs: debug
     runs-on: ubuntu-latest
