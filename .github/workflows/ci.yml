@@ -8,7 +8,8 @@ jobs:
     outputs:
       matrix: ${{ steps.matrix-output.outputs.matrix }}
     steps:
-      - name: matrix-output
+      - id: matrix-output
+        name: matrix-output
         shell: bash
         run: |
           echo "matrix={\"plugins\": [\"plugin1\", \"plugin2\"]}" >> $GITHUB_OUTPUT
@@ -20,6 +21,11 @@ jobs:
         run: |
           echo "Raw json"
           echo ${{ needs.custom-input.outputs.matrix }}
+        id: debug-output-raw
+      - shell: bash
+        run: |
+          echo "Parsed json"
+          echo ${{ fromJson(needs.custom-input.outputs.matrix) }}
         id: debug-output-raw
   prepare-lint:
     needs: debug
