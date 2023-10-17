@@ -12,11 +12,17 @@ jobs:
         name: matrix-output
         shell: bash
         run: |
-          echo "matrix=[\"plugin1\", \"plugin2\"]" # debug
-          echo "matrix=[\"plugin1\", \"plugin2\"]" >> $GITHUB_OUTPUT
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "matrix=[\"plugin1\", \"plugin2\"]" # debug
+            echo "matrix=[\"plugin1\", \"plugin2\"]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          echo "matrix=[]"
+          echo "matrix=[]" >> $GITHUB_OUTPUT
   debug:
     needs: custom-input
     runs-on: ubuntu-latest
+    if: ${{ fromJson(needs.custom-input.outputs.matrix) != '[]' }}
     strategy:
       fail-fast: true
       matrix:
