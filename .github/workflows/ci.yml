@@ -24,7 +24,7 @@ jobs:
         with:
           requirements-file: core/requirements-dev.txt
       - name: Check code formatting
-        run: black --check core/
+        run: python -m black --check core/
 
   prepare-test:
     needs: lint
@@ -50,7 +50,7 @@ jobs:
           requirements-file: core/requirements-test.txt
           setup: false
       - name: Run tests
-        run: pytest tests/
+        run: python -m pytest tests/
 
   prepare-package:
     needs: test
