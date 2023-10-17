@@ -16,32 +16,20 @@ runs:
   steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
     - name: Setup Python
-      uses: actions/setup-python@v2.3.2
+      uses: actions/setup-python@v4
+      id: setup-python
       with:
         python-version: ${{ inputs.python-version }}
-
-    - name: Get pip cache dir
-      shell: bash
-      id: pip-cache
-      run: |
-        PIP_CACHE_DIR="$(pip cache dir)"
-        echo "pip-cache=$PIP_CACHE_DIR"
-        echo "pip-cache=$PIP_CACHE_DIR" >> $GITHUB_OUTPUT
-    - name: Cache dependencies
-      id: cache-dependencies
-      uses: actions/cache@v3
-      with:
-        path: ${{ steps.pip-cache.outputs.pip-cache }}
-        key: ${{ runner.os }}-pip-${{ hashFiles(inputs.requirements-file) }}
+        cache: 'pip'
+        cache-dependency-path: ${{ inputs.requirements-file }}
     - name: Fail if cache-hit != 'true' and setup = 'false'
       shell: bash
-      if: steps.cache-dependencies.outputs.cache-hit != 'true' && inputs.setup == 'false'
+      if: steps.setup-python.outputs.cache-hit != 'true' && inputs.setup == 'false'
       run: exit 1
     - name: Install dependencies if cache misses and setup is true
       shell: bash
-      if: steps.cache-dependencies.outputs.cache-hit != 'true' && inputs.setup == 'true'
+      if: steps.setup-python.outputs.cache-hit != 'true' && inputs.setup == 'true'
       run: |
         python -m pip install --upgrade pip
         python -m pip install -r ${{ inputs.requirements-file }}
