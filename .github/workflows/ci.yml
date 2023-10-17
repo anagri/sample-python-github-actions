@@ -12,14 +12,15 @@ jobs:
         name: matrix-output
         shell: bash
         run: |
-          echo "matrix={\"plugin\": [\"plugin1\", \"plugin2\"]}" # debug
-          echo "matrix={\"plugin\": [\"plugin1\", \"plugin2\"]}" >> $GITHUB_OUTPUT
+          echo "matrix=[\"plugin1\", \"plugin2\"]" # debug
+          echo "matrix=[\"plugin1\", \"plugin2\"]" >> $GITHUB_OUTPUT
   debug:
     needs: custom-input
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
-      matrix: ${{ fromJson(needs.custom-input.outputs.matrix) }}
+      matrix:
+        plugin: ${{ fromJson(needs.custom-input.outputs.matrix) }}
     steps:
       - shell: bash
         run: |
@@ -28,12 +29,16 @@ jobs:
       - shell: bash
         run: |
           echo "Parsed json"
-          echo ${{ fromJson(needs.custom-input.outputs.matrix).plugin }}
+          echo ${{ fromJson(needs.custom-input.outputs.matrix) }}
+      - shell: bash
+        run: |
+          echo "Current plugin"
+          echo ${{ matrix.plugin }}
       - shell: bash
         run: |
           echo "Plugin length"
-          echo "'${{ fromJson(needs.custom-input.outputs.matrix).plugin.length }}'"
-          echo "0=='${{ fromJson(needs.custom-input.outputs.matrix).plugin.length == 0 }}'"
+          echo "is empty = ${{ fromJson(needs.custom-input.outputs.matrix) == '[]' }}"
+          echo "is not empty = '${{ fromJson(needs.custom-input.outputs.matrix) != '[]' }}'"
   prepare-lint:
     needs: debug
     runs-on: ubuntu-latest
