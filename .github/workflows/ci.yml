@@ -6,6 +6,8 @@ jobs:
   prepare-lint:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
@@ -15,6 +17,8 @@ jobs:
     needs: prepare-lint
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
@@ -23,8 +27,11 @@ jobs:
         run: black --check core/
 
   prepare-test:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
@@ -35,6 +42,8 @@ jobs:
     needs: prepare-test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
@@ -44,8 +53,11 @@ jobs:
         run: pytest tests/
 
   prepare-package:
+    needs: test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
@@ -56,6 +68,8 @@ jobs:
     needs: prepare-package
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
