@@ -11,7 +11,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
-          requirements-file: requirements-dev.txt
+          requirements-file: core/requirements-dev.txt
           setup: true
   lint:
     needs: prepare-lint
@@ -22,7 +22,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
-          requirements-file: requirements-dev.txt
+          requirements-file: core/requirements-dev.txt
       - name: Check code formatting
         run: black --check core/
 
@@ -35,7 +35,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
-          requirements-file: requirements-test.txt
+          requirements-file: core/requirements-test.txt
           setup: true
 
   test:
@@ -47,7 +47,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
-          requirements-file: requirements-test.txt
+          requirements-file: core/requirements-test.txt
           setup: false
       - name: Run tests
         run: pytest tests/
@@ -61,7 +61,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
-          requirements-file: requirements.txt
+          requirements-file: core/requirements.txt
           setup: true
 
   package:
@@ -73,6 +73,6 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup
         with:
-          requirements-file: requirements.txt
+          requirements-file: core/requirements.txt
       - name: Just packaging
         run: echo "Packaging done"
