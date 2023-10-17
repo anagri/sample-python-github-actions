@@ -21,8 +21,8 @@ runs:
       shell: bash
       run: |
         PIP_CACHE_DIR="$(python -m pip cache dir)"
-        echo "pip-cache-dir='${PIP_CACHE_DIR}'"
-        echo "pip-cache-dir='${PIP_CACHE_DIR}'" >> $GITHUB_OUTPUT
+        echo "pip-cache-dir=${PIP_CACHE_DIR}"
+        echo "pip-cache-dir=${PIP_CACHE_DIR}" >> $GITHUB_OUTPUT
     - name: Setup cache
       uses: actions/cache@v2
       id: setup-cache
@@ -55,5 +55,6 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
+        find ${{ steps.pip-cache-dir.outputs.pip-cache-dir }}
         python -m pip install --upgrade pip $PIP_OPTS
         python -m pip install -r '${{ inputs.requirements-file }}' $PIP_OPTS
