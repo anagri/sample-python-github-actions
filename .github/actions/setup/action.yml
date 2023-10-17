@@ -37,8 +37,10 @@ runs:
         python-version: ${{ inputs.python-version }}
     - name: Fail if cache-hit != 'true' and setup = 'false'
       shell: bash
-      if: steps.setup-python.outputs.cache-hit != 'true' && inputs.setup == 'false'
-      run: exit 1
+      if: steps.setup-cache.outputs.cache-hit != 'true' && inputs.setup == 'false'
+      run: |
+        echo "${{ steps.setup-cache.outputs.cache-hit }} != 'true' && ${{ inputs.setup }}== 'false'"
+        exit 1
     - name: pip-opts
       id: pip-opts
       shell: bash
