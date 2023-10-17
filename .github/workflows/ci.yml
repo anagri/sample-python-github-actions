@@ -18,12 +18,9 @@ jobs:
     steps:
       - shell: bash
         run: |
-          echo "Raw json ${{ needs.custom-input.outputs.matrix }}"
+          echo "Raw json"
+          echo ${{ needs.custom-input.outputs.matrix }}
         id: debug-output-raw
-      - shell: bash
-        run: |
-          echo "Parsed json ${{ fromJson(needs.custom-input.outputs.matrix) }}"
-        id: debug-output-json
   prepare-lint:
     needs: debug
     runs-on: ubuntu-latest
