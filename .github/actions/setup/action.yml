@@ -27,8 +27,8 @@ runs:
       id: pip-cache
       run: |
         PIP_CACHE_DIR="$(pip cache dir)"
-        echo "PIP_CACHE_DIR=$PIP_CACHE_DIR"
-        echo "PIP_CACHE_DIR=$PIP_CACHE_DIR" >> $GITHUB_OUTPUT
+        echo "pip-cache=$PIP_CACHE_DIR"
+        echo "pip-cache=$PIP_CACHE_DIR" >> $GITHUB_OUTPUT
     - name: Cache dependencies
       id: cache-dependencies
       uses: actions/cache@v3
