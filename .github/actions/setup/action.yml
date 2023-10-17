@@ -33,7 +33,7 @@ runs:
       id: cache-dependencies
       uses: actions/cache@v3
       with:
-        path: ${{ steps.pip-cache.outputs.dir }}
+        path: ${{ steps.pip-cache.outputs.pip-cache }}
         key: ${{ runner.os }}-pip-${{ hashFiles(inputs.requirements-file) }}
     - name: Fail if cache-hit != 'true' and setup = 'false'
       shell: bash
