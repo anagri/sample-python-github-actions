@@ -48,10 +48,10 @@ runs:
         else
           PIP_OPTS="--no-index --find-links=\"${{ steps.pip-cache-dir.outputs.pip-cache-dir }}\""
         fi
-        echo "pip-opts='${PIP_OPTS}'"
-        echo "pip-opts='${PIP_OPTS}'" >> $GITHUB_OUTPUT
+        echo "PIP_OPTS=${PIP_OPTS}" >> $GITHUB_ENV
+
     - name: Install dependencies
       shell: bash
       run: |
-        python -m pip install --upgrade pip ${{ steps.pip-opts.outputs.pip-opts }}
-        python -m pip install -r '${{ inputs.requirements-file }}' ${{ steps.pip-opts.outputs.pip-opts }}
+        python -m pip install --upgrade pip $PIP_OPTS
+        python -m pip install -r '${{ inputs.requirements-file }}' $PIP_OPTS
