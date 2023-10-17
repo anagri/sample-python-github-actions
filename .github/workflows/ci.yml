@@ -12,6 +12,7 @@ jobs:
         name: matrix-output
         shell: bash
         run: |
+          echo "matrix={\"plugin\": [\"plugin1\", \"plugin2\"]}" # debug
           echo "matrix={\"plugin\": [\"plugin1\", \"plugin2\"]}" >> $GITHUB_OUTPUT
   debug:
     needs: custom-input
