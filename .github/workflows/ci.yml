@@ -3,7 +3,28 @@ name: CI
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
+  custom-input:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix-output.outputs.matrix }}
+    steps:
+      - name: matrix-output
+        shell: bash
+        run: |
+          echo "matrix={\"plugins\": [\"plugin1\", \"plugin2\"]}" >> $GITHUB_OUTPUT
+  debug:
+    strategy:
+      matrix: ${{ fromJson(needs.custom-input.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    needs: custom-input
+    steps:
+      - shell: bash
+        run: |
+          echo "Running on ${{ matrix.plugin }}"
+          echo "Full json ${{ fromJson(needs.custom-input.outputs.matrix) }}"
+        id: debug-output
   prepare-lint:
+    needs: debug
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
