@@ -28,11 +28,12 @@ jobs:
       - shell: bash
         run: |
           echo "Parsed json"
-          echo ${{ fromJson(needs.custom-input.outputs.matrix) }}
+          echo ${{ fromJson(needs.custom-input.outputs.matrix).plugin }}
       - shell: bash
         run: |
-          echo "Current plugin"
-          echo ${{ matrix.plugin }}
+          echo "Plugin length"
+          echo "'${{ fromJson(needs.custom-input.outputs.matrix).plugin.length }}'"
+          echo "0=='${{ fromJson(needs.custom-input.outputs.matrix).plugin.length == 0 }}'"
   prepare-lint:
     needs: debug
     runs-on: ubuntu-latest
